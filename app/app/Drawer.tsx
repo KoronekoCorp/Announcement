@@ -1,39 +1,27 @@
 "use client"
 import { useState, ReactNode, useEffect } from 'react';
 import Link from 'next/link';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import BookmarksIcon from '@mui/icons-material/Bookmarks';
-import SettingsIcon from '@mui/icons-material/Settings';
-import MenuIcon from '@mui/icons-material/Menu';
-import LoginIcon from '@mui/icons-material/Login';
-import StorageIcon from '@mui/icons-material/Storage';
-import LoyaltyIcon from '@mui/icons-material/Loyalty';
-import SearchIcon from '@mui/icons-material/Search';
+
 import { ListItemIcon, SwipeableDrawer, Box, IconButton, AppBar, Drawer, Toolbar, Typography, Divider, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useRouter } from 'next/navigation';
 import { getTheme } from './Theme';
-import MusicNote from '@mui/icons-material/MusicNote';
-import TagIcon from '@mui/icons-material/Tag';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import SettingsIcon from '@mui/icons-material/Settings';
+import MenuIcon from '@mui/icons-material/Menu';
+import BugReportIcon from '@mui/icons-material/BugReport';
 
 const DRAWER_WIDTH = 240;
 
 const LINKS = [
     { text: 'Create', href: '/create', icon: AddCircleOutlineIcon },
-    { text: 'Search', href: '/search', icon: SearchIcon },
-    { text: 'Tags', href: '/tag', icon: TagIcon },
-    { text: 'Subscription', href: '/watched', icon: LoyaltyIcon },
-    { text: 'Bookmark', href: '/bookmark', icon: BookmarksIcon },
+    { text: 'Test', href: '/example', icon: BugReportIcon },
 ];
 
 const PLACEHOLDER_LINKS = [
     { text: 'Settings', href: '/settings', icon: SettingsIcon },
-    { text: 'Music', href: '/music', icon: MusicNote },
-    { text: 'Server', href: '/server', icon: StorageIcon },
-    { text: 'Login', href: '/login', icon: LoginIcon },
-    // { text: 'Logout', href: '/api/auth/signout', icon: LogoutIcon },
 ];
 
 export function Root({ darkmode, children }: { darkmode?: boolean, children: ReactNode }) {

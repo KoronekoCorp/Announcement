@@ -5,8 +5,7 @@ import { Container, Stack, TextField, Button, FormControlLabel, Checkbox, FormCo
 import type { DialogProps } from '@mui/material/Dialog';
 import { useEffect, useState } from "react";
 import { Getlist, Random, Setlist } from "./server";
-import type { AnnouncementData } from "@/Data/Type";
-import { Announcement } from "@/Data/Announcement";
+import { Announcement, type AnnouncementData } from "@/components/Announcement";
 
 export default function Page({ params }: { params: { site: string }, }) {
     const [key, setKey] = useState("")
