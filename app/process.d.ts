@@ -5,7 +5,3 @@ declare namespace NodeJS {
         SECURITY_REDIS_port: string
     }
 }
-
-declare interface Window {
-    TOP?: { [key: string]: undefined | true }
-}
