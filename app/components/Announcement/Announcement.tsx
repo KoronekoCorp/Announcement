@@ -3,19 +3,20 @@ import { useEffect, useState } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
 import type { AnnouncementData } from './Type'
 
+const prefix = "Announcement."
 
 export function Announcement({ data, onClose }: { data: AnnouncementData, onClose?: (data: AnnouncementData) => void }) {
     const [open, setOpen] = useState(false)
     useEffect(() => {
         if (data.option?.every) setOpen(true)
-        if (localStorage.getItem(data.key) !== data.value) {
+        if (localStorage.getItem(prefix + data.key) !== data.value) {
             setOpen(true)
         }
     }, [data.key])
 
     const handleClose = () => {
         setOpen(false);
-        localStorage.setItem(data.key, data.value)
+        localStorage.setItem(prefix + data.key, data.value)
         if (onClose) onClose(data)
     }
 
@@ -24,7 +25,7 @@ export function Announcement({ data, onClose }: { data: AnnouncementData, onClos
             {data.title}
         </DialogTitle>
         <DialogContent sx={{ margin: "auto" }}>
-            {data.body}
+            <div dangerouslySetInnerHTML={{ __html: data.body }} />
         </DialogContent>
         <DialogActions>
             <Button onClick={handleClose} color="primary">

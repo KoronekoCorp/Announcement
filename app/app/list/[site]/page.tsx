@@ -6,6 +6,9 @@ import type { DialogProps } from '@mui/material/Dialog';
 import { useEffect, useState } from "react";
 import { Getlist, Random, Setlist } from "./server";
 import { Announcement, type AnnouncementData } from "@/components/Announcement";
+import { enqueueSnackbar } from "notistack";
+
+const prefix = "Announcement."
 
 export default function Page({ params }: { params: { site: string }, }) {
     const [key, setKey] = useState("")
@@ -78,12 +81,17 @@ export default function Page({ params }: { params: { site: string }, }) {
                             {row.title}
                         </TableCell>
                         <TableCell sx={{ "& > button": { m: 1 } }}>
-                            <Button variant="contained" color="info" onClick={() => {
+                            <Button variant="outlined" color="info" onClick={() => {
                                 setKey(row.key); setValue(row.value); setTitle(row.title); setBody(row.body);
                                 setoption([row.option.mustAgree, row.option.disable, row.option.every, row.option.Fullwidth]);
                                 setMaxWidth(row.option.maxWidth);
                             }}>
                                 EDIT
+                            </Button>
+                            <Button variant="outlined" color="info" onClick={() => {
+                                navigator.clipboard.writeText(JSON.stringify(row))
+                            }}>
+                                COPY
                             </Button>
                             <Button variant="outlined" color={row.option.disable ? "error" : "success"} onClick={async () => {
                                 const newDatas = datas.slice()
@@ -96,7 +104,7 @@ export default function Page({ params }: { params: { site: string }, }) {
                             }}>
                                 {row.option.disable ? "已禁用" : "已启用"}
                             </Button>
-                            <Button variant="contained" color="error" onClick={() => Del(row.key)}>
+                            <Button variant="outlined" color="error" onClick={() => Del(row.key)}>
                                 DELETE
                             </Button>
                         </TableCell>
@@ -104,6 +112,19 @@ export default function Page({ params }: { params: { site: string }, }) {
                 ))}
             </TableBody>
         </Table>
+        <Button variant="outlined" color="info" onClick={async () => {
+            const d = await navigator.clipboard.readText()
+            const newdatas = datas.slice()
+            try {
+                newdatas.push(JSON.parse(d))
+                await Setlist(params.site, JSON.stringify(newdatas))
+                setdatas(newdatas)
+            } catch {
+                enqueueSnackbar("Failed", { variant: "error" })
+            }
+        }} fullWidth sx={{ m: 1 }}>
+            IMPORT FROM Clipboard
+        </Button>
         <H2 sx={{ mt: 2 }}>
             Add or Edit Announcement
         </H2>
@@ -174,7 +195,7 @@ export default function Page({ params }: { params: { site: string }, }) {
                 </Button>
                 <Button variant="contained" color="primary" onClick={() => {
                     const d = Getdata();
-                    localStorage.removeItem(d.key);
+                    localStorage.removeItem(prefix + d.key);
                     setdata(d);
                 }}>
                     PREVIEW
