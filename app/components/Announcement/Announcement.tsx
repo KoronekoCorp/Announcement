@@ -8,9 +8,12 @@ const prefix = "Announcement."
 export function Announcement({ data, onClose }: { data: AnnouncementData, onClose?: (data: AnnouncementData) => void }) {
     const [open, setOpen] = useState(false)
     useEffect(() => {
-        if (data.option?.every) setOpen(true)
-        if (localStorage.getItem(prefix + data.key) !== data.value) {
+        if (data.option?.every) {
             setOpen(true)
+        } else if (localStorage.getItem(prefix + data.key) !== data.value) {
+            setOpen(true)
+        } else {
+            if (onClose) onClose(data)
         }
     }, [data.key])
 

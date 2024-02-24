@@ -27,6 +27,14 @@ const PLACEHOLDER_LINKS = [
 export function Root({ darkmode, children }: { darkmode?: boolean, children: ReactNode }) {
     const [open, setOpen] = useState(false);
     const [dark, setdark] = useState(darkmode ?? false);
+    const [PLACEHOLDER_LINKS, setlist] = useState<{ text: string, href: string, icon: JSX.ElementType }[]>([])
+    useEffect(() => {
+        fetch("/api/all").then((r) => r.json()).then((r: string[]) => setlist(r.map(i => {
+            return {
+                text: i, href: `/list/${i}`, icon: SettingsIcon
+            }
+        })))
+    }, [])
     let mode: "dark" | "light"
     if (dark) { mode = 'dark' } else { mode = 'light' }
     const router = useRouter()
@@ -38,7 +46,7 @@ export function Root({ darkmode, children }: { darkmode?: boolean, children: Rea
     }, [])
 
     return <ThemeProvider theme={theme}>
-        <AppBar position="fixed" sx={{ zIndex: 2000, minHeight: '64px' }} color='inherit'>
+        <AppBar position="fixed" sx={{ zIndex: 1205, minHeight: '64px' }} color='inherit'>
             <Toolbar sx={{ backgroundColor: 'palette.main', minHeight: '64px' }}>
                 {/* <IconButton onClick={() => { setOpen(!open) }}>
                 <MenuIcon sx={{ color: '#444', transform: 'translateY(-2px)' }} />
