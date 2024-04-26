@@ -1,11 +1,10 @@
-import { type RedisClientType, createClient } from 'redis';
+import { RedisClientType, createClient } from 'redis';
 
-let client: RedisClientType | undefined
-let id: NodeJS.Timeout | undefined
-
-async function UseRedis() {
-    if (client == undefined) {
-        client = createClient({
+class R {
+    client: RedisClientType
+    id?: NodeJS.Timeout
+    constructor() {
+        this.client = createClient({
             password: process.env.SECURITY_REDIS_password,
             socket: {
                 host: process.env.SECURITY_REDIS_host,
@@ -13,19 +12,27 @@ async function UseRedis() {
             }
         });
     }
-    if (client.isOpen == false) {
-        await client.connect()
-        console.log("[REDIS CONNECTED]")
-        if (id) {
-            clearTimeout(id)
+
+    async get() {
+        if (this.client.isOpen == false) {
+            await this.client.connect()
         }
-        id = setTimeout(() => {
-            client?.disconnect()
-            console.log("[REDIS RELAESED]")
-        }, 30000);
+        if (this.id) clearTimeout(this.id)
+        this.id = setTimeout(() => this.release(), 30000);
+        return this.client
     }
-    return client
+
+    async release() {
+        if (this.client.isOpen == true) {
+            await this.client.quit()
+        }
+    }
 }
 
+const r = new R()
+
+async function UseRedis() {
+    return r.get()
+}
 
 export { UseRedis }
